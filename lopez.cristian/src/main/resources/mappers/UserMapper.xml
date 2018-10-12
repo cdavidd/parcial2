@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="edu.eci.pdsw.persistence.mybatisimpl.mappers.UserMapper">
+
+    <resultMap type='User' id='UserResult'>
+        <id property='login' column='login'/>        
+        <result property='name' column='name'/>
+        <result property='lastName' column='lastName'/>
+    </resultMap>
+
+    <select id="getUsers" resultMap="UserResult">
+        SELECT
+            p.login,
+            p.name,
+            p.lastName
+        FROM
+            BLOG_USUARIO as p
+    </select>
+    
+     <insert id="insertUser" parameterType="edu.eci.pdsw.entities.User">
+        insert into BLOG_USUARIO(login,name,lastname) values (#{login},#{name},#{lastName})
+    </insert>
+    
+    <delete id="deleteAll">
+        delete from BLOG_USUARIO
+    </delete>
+</mapper>

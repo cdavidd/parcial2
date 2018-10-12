@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="edu.eci.pdsw.persistence.mybatisimpl.mappers.BlogMapper">
+
+    <resultMap type='Blog' id='BlogResult'>
+        <id property='id' column='id'/>        
+        <result property='title' column='title'/>
+        <result property='creationDate' column='creation_date'/>
+    </resultMap>	
+
+    <select id="findByUser" resultMap="BlogResult" parameterType="string">
+        SELECT
+            b.id,
+            b.title,
+            b.creation_date
+        FROM
+            BLOG as b
+        <if test="login != null">
+            WHERE b.author = #{login}
+        </if>
+    </select>
+    
+    
+    
+    <select id="comentariosOfensivos" resultMap="BlogResult" parameterType="string">
+    	SELECT 
+            name, 
+            login, 
+            BLOG.id, 
+            BLOG.title, 
+            BLOG_COMMENT.content  
+    	FROM 
+            BLOG_USUARIO,
+            BLOG,
+            BLOG_COMMENT
+        WHERE blog_id= BLOG.id  AND BLOG_COMMENT.author =login AND 
+            (BLOG_COMMENT.content LIKE "%tonto%" OR BLOG_COMMENT.content LIKE "%burro%")
+        ORDER BY login
+    </select>
+    
+    <delete id="deleteAll">
+        delete from BLOG
+    </delete>
+</mapper>

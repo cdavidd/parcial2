@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="edu.eci.pdsw.persistence.mybatisimpl.mappers.CommentMapper">
+    <resultMap type='Comment' id='CommentResult'>
+        <id property='id' column='bc_id'/>        
+        <result property='creationDate' column='bc_creation_date'/>
+        <result property='content' column='bc_content'/>
+        <association property='author' javaType="User" resultMap="edu.eci.pdsw.persistence.mybatisimpl.mappers.UserMapper.UserResult"/>
+    </resultMap>
+    
+  
+    <select id="searchCommentsByBlogTitle" resultMap="CommentResult" parameterType="map">
+        SELECT
+            bu.login,
+            bu.name,
+            bu.lastname,
+
+            b.id,
+            b.creation_date,
+            b.author,
+            b.title,
+            b.content,
+
+            bc.id AS bc_id,
+            bc.creation_date AS bc_creation_date,
+            bc.author AS bc_author,
+            bc.blog_id,
+            bc.content AS bc_content 
+        FROM 
+            BLOG_USUARIO AS bu,
+            BLOG AS b,
+            BLOG_COMMENT AS bc
+        WHERE  
+            title = #{title} AND blog_id= b.id  AND bc.author =login
+        ORDER BY bc.creation_date DESC
+    </select>
+    
+    
+</mapper>
